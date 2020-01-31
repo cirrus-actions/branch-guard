@@ -3,8 +3,6 @@ container:
 
 task:
   name: Test
-  env:
-    GITHUB_TOKEN: $CIRRUS_REPO_CLONE_TOKEN
   node_modules_cache:
     folder: node_modules
     fingerprint_script: cat package-lock.json
