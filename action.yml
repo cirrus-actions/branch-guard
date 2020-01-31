@@ -1,6 +1,11 @@
 name: 'Branch Guard'
 description: 'Guards branches from merges when'
 author: 'Cirrus Labs'
+inputs:
+  appsToIgnore:
+    description: 'Comma separated list of app names to ignore'
+    required: false
+    default: ''
 runs:
   using: 'node12'
   main: 'dist/index.js'
