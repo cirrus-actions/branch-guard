@@ -99,7 +99,7 @@ export class CheckConclusion {
 export async function overallRefConclusion(repositoryOwner: string, repositoryName: string, ref: string): Promise<CheckConclusion> {
   let appsToIgnore = core.getInput('appsToIgnore').split(',').filter(name => name.length > 0);
 
-  let api = new github.GitHub(getRequiredEnvironmentVariable('GITHUB_TOKEN'));
+  let api = process.env.GITHUB_TOKEN ? new github.GitHub(process.env.GITHUB_TOKEN) : new github.GitHub({});
 
   let checksResponse = await api.checks.listSuitesForRef({
     owner: repositoryOwner,
