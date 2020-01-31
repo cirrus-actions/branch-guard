@@ -1,1 +1,1 @@
-# GitHub Action to block merges of PRs when CI checks for a target branch are failing
+# Block PR merges when Checks for target branches are failing

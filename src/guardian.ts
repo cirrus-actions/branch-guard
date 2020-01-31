@@ -43,7 +43,7 @@ export async function checkReference(repositoryOwner: string, repositoryName: st
 export async function findAffectedPRs(repositoryOwner: string, repositoryName: string, ref: string, page: number = 1): Promise<Array<{ number: number, sha: string }>> {
   let branch = ref.split('/', 3).pop();
 
-  let api = process.env.GITHUB_TOKEN ? new github.GitHub(process.env.GITHUB_TOKEN) : new github.GitHub({});
+  let api = new github.GitHub(getRequiredEnvironmentVariable('GITHUB_TOKEN'));
 
   let pullsResponse = await api.pulls.list({
     owner: repositoryOwner,
@@ -99,7 +99,7 @@ export class CheckConclusion {
 export async function overallRefConclusion(repositoryOwner: string, repositoryName: string, ref: string): Promise<CheckConclusion> {
   let appsToIgnore = core.getInput('appsToIgnore').split(',').filter(name => name.length > 0);
 
-  let api = process.env.GITHUB_TOKEN ? new github.GitHub(process.env.GITHUB_TOKEN) : new github.GitHub({});
+  let api = new github.GitHub(getRequiredEnvironmentVariable('GITHUB_TOKEN'));
 
   let checksResponse = await api.checks.listSuitesForRef({
     owner: repositoryOwner,
