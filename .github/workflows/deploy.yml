@@ -1,7 +1,8 @@
 name: "deploy"
 on:
-  release:
-    types: [created]
+  create:
+    branches:
+      - releases/v*
 
 jobs:
   build:
