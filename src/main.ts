@@ -1,6 +1,7 @@
 import * as core from '@actions/core'
-import {checkReference} from "./guardian";
+import {checkReference, checkReferenceAndSetForSHA} from "./guardian";
 import {getRequiredEnvironmentVariable} from "./utils";
+import {context} from "@actions/github";
 
 async function run(): Promise<void> {
   try {
@@ -16,7 +17,15 @@ async function _runImpl(): Promise<void> {
 
   let [owner, name] = GITHUB_REPOSITORY.split('/');
 
-  await checkReference(owner, name, GITHUB_REF);
+  if (context.eventName == "pull_request" && context.action == "opened") {
+    let pr = context.payload.pull_request?.number;
+    let sha = context.payload.pull_request?.head?.sha;
+    let ref = context.payload.pull_request?.base?.ref;
+    core.info(`Checking reference ${ref} for PR #${pr} and SHA ${sha}.`);
+    await checkReferenceAndSetForSHA(owner, name, ref, sha);
+  } else {
+    await checkReference(owner, name, GITHUB_REF);
+  }
 }
 
 run();

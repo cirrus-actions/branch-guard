@@ -4,12 +4,7 @@ import {getRequiredEnvironmentVariable} from "./utils";
 
 type GitHubStatus = { context: string, description?: string, state: "error" | "failure" | "pending" | "success", target_url?: string }
 
-export async function checkReference(repositoryOwner: string, repositoryName: string, ref: string) {
-  let conclusion = await overallRefConclusion(repositoryOwner, repositoryName, ref);
-  if (!conclusion.allCompleted && !conclusion.failedCheck) {
-    console.log(`Seems checks are still running... Nothing to react to at the moment!`);
-    return;
-  }
+function commitStatusFromConclusion(conclusion: CheckConclusion): GitHubStatus{
   let status: GitHubStatus = {
     context: "branch-guard",
     description: "Checks are running...",
@@ -24,9 +19,17 @@ export async function checkReference(repositoryOwner: string, repositoryName: st
       status.state = "success";
       status.description = "All checks are passing!";
     }
-  } else {
-
   }
+  return status;
+}
+
+export async function checkReference(repositoryOwner: string, repositoryName: string, ref: string) {
+  let conclusion = await overallRefConclusion(repositoryOwner, repositoryName, ref);
+  if (!conclusion.allCompleted && !conclusion.failedCheck) {
+    console.log(`Seems checks are still running... Nothing to react to at the moment!`);
+    return;
+  }
+  let status = commitStatusFromConclusion(conclusion);
   let page = 0;
   while (true) {
     let prs = await findAffectedPRs(repositoryOwner, repositoryName, ref, ++page);
@@ -37,6 +40,13 @@ export async function checkReference(repositoryOwner: string, repositoryName: st
       await setStatus(repositoryOwner, repositoryName, pr.sha, status)
     }
   }
+  core.info(`Done!`);
+}
+
+export async function checkReferenceAndSetForSHA(repositoryOwner: string, repositoryName: string, ref: string, sha: string) {
+  let conclusion = await overallRefConclusion(repositoryOwner, repositoryName, ref);
+  let status = commitStatusFromConclusion(conclusion);
+  await setStatus(repositoryOwner, repositoryName, sha, status);
   core.info(`Done!`);
 }
 
