@@ -19,7 +19,7 @@ async function _runImpl(): Promise<void> {
   core.info(`Handling '${context.payload.action}' action for ${context.eventName} event for ${context.ref}@${context.sha}.`);
 
   // can't rely on GITHUB_REF because of https://github.community/t5/GitHub-Actions/check-run-check-suite-events-always-run-workflow-against-latest/m-p/41537/highlight/true#M4656
-  if (context.eventName == "pull_request" && context.payload.action == "opened") {
+  if (context.eventName == "pull_request") {
     let pr = context.payload.pull_request?.number;
     let sha = context.payload.pull_request?.head?.sha;
     let ref = context.payload.pull_request?.base?.ref;
