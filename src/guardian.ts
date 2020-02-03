@@ -107,7 +107,7 @@ export class CheckConclusion {
 }
 
 export async function overallRefConclusion(repositoryOwner: string, repositoryName: string, ref: string): Promise<CheckConclusion> {
-  let appsToIgnore = core.getInput('appsToIgnore').split(',').filter(name => name.length > 0);
+  let appsToCheck = core.getInput('appsToCheck').split(',').filter(name => name.length > 0);
 
   let api = new github.GitHub(getRequiredEnvironmentVariable('GITHUB_TOKEN'));
 
@@ -116,7 +116,7 @@ export async function overallRefConclusion(repositoryOwner: string, repositoryNa
     repo: repositoryName,
     ref: ref
   });
-  let checkSuites = checksResponse.data.check_suites.filter(checkSuite => !appsToIgnore.includes(checkSuite.app.name));
+  let checkSuites = checksResponse.data.check_suites.filter(checkSuite => appsToCheck.length === 0 || appsToCheck.includes(checkSuite.app.name));
   core.info(`Found ${checkSuites.length} check suites.`);
   for (const checkSuite of checkSuites) {
     core.info(`Check suite ${checkSuite.id}: ${checkSuite.app.name} ${checkSuite.status} ${checkSuite.conclusion}`)

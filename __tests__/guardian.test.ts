@@ -7,7 +7,7 @@ test('findAffectedPRs', async () => {
 });
 
 test('overallRefConclusion', async () => {
-  process.env['INPUT_APPSTOIGNORE'] = 'Codecov,WIP';
+  process.env['INPUT_APPSTOCHECK'] = 'Cirrus CI';
   let conclusion = await overallRefConclusion("flutter", "flutter", "refs/heads/beta");
   expect(conclusion.allCompleted).toBeTruthy()
 });
