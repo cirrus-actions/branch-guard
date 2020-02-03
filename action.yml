@@ -1,6 +1,9 @@
 name: 'Branch Guard'
 description: 'Guards branches from merges when'
 author: 'Cirrus Labs'
+branding:
+  icon: 'lock'
+  color: 'green'
 inputs:
   appsToCheck:
     description: 'Comma separated list of App names to check. If empty, all Apps will be checked.'
