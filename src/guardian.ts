@@ -26,14 +26,14 @@ function commitStatusFromConclusion(conclusion: CheckConclusion): GitHubStatus{
 export async function checkReference(repositoryOwner: string, repositoryName: string, ref: string) {
   let conclusion = await overallRefConclusion(repositoryOwner, repositoryName, ref);
   if (!conclusion.allCompleted && !conclusion.failedCheck) {
-    console.log(`Seems checks are still running... Nothing to react to at the moment!`);
+    core.info(`Seems checks are still running... Nothing to react to at the moment!`);
     return;
   }
   let status = commitStatusFromConclusion(conclusion);
   let page = 0;
   while (true) {
     let prs = await findAffectedPRs(repositoryOwner, repositoryName, ref, ++page);
-    core.debug(`Found ${prs.length} PRs on page ${page}: ${prs}`);
+    core.info(`Found ${prs.length} PRs on page ${page}: ${prs}`);
     if (prs.length === 0) break;
     for (const pr of prs) {
       core.info(`Setting status for PR #${pr.number}...`);
@@ -119,7 +119,7 @@ export async function overallRefConclusion(repositoryOwner: string, repositoryNa
   let checkSuites = checksResponse.data.check_suites.filter(checkSuite => !appsToIgnore.includes(checkSuite.app.name));
   core.info(`Found ${checkSuites.length} check suites.`);
   for (const checkSuite of checkSuites) {
-    core.debug(`Check suite ${checkSuite.id}: ${checkSuite.app.name} ${checkSuite.status} ${checkSuite.conclusion}`)
+    core.info(`Check suite ${checkSuite.id}: ${checkSuite.app.name} ${checkSuite.status} ${checkSuite.conclusion}`)
   }
   // first check if there is any suite that completed but not in a successful state to report it ASAP
   for (const checkSuite of checkSuites) {
