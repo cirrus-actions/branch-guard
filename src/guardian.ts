@@ -126,7 +126,7 @@ export async function overallRefConclusion(repositoryOwner: string, repositoryNa
   for (const checkSuite of checkSuites) {
     if (checkSuite.status === 'completed' && (checkSuite.conclusion !== 'neutral' && checkSuite.conclusion !== 'success')) {
       return new CheckConclusion(
-        false,
+        true,
         new CheckInfo(checkSuite.app.name, checkSuite.url, checkSuite.conclusion)
       )
     }
