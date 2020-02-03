@@ -7,8 +7,6 @@ starts failing and unblock once it's passing again:
 on:
   check_suite: # to update all PRs upon a Check Suite completion
     type: ['completed']
-    branches:
-      - master # branches to guard
   pull_request: # to update newly open PRs
     type: ['opened']
   
@@ -16,6 +14,7 @@ name: Branch Guard
 jobs:
   branch-guard:
     name: Branch Guard
+    if: github.event.check_suite.head_branch == 'master' || github.event.pull_request.base.ref == 'master'
     runs-on: ubuntu-latest
     steps:
     - uses: cirrus-actions/branch-guard@v1
