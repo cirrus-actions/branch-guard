@@ -30,11 +30,12 @@ export async function checkReference(repositoryOwner: string, repositoryName: st
     return;
   }
   let status = commitStatusFromConclusion(conclusion);
+  core.info(`Status to set: ${JSON.stringify(status)}`);
   let page = 0;
   while (true) {
     let prs = await findAffectedPRs(repositoryOwner, repositoryName, ref, ++page);
-    core.info(`Found ${prs.length} PRs on page ${page}: ${prs}`);
     if (prs.length === 0) break;
+    core.info(`Found ${prs.length} PRs on page ${page}.`);
     for (const pr of prs) {
       core.info(`Setting status for PR #${pr.number}...`);
       await setStatus(repositoryOwner, repositoryName, pr.sha, status)
