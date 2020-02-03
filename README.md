@@ -5,10 +5,9 @@ starts failing and unblock once it's passing again:
 
 ```yaml
 on:
+  pull_request: # to update newly open PRs or when a PR is synced
   check_suite: # to update all PRs upon a Check Suite completion
     type: ['completed']
-  pull_request: # to update newly open PRs
-    type: ['opened']
   
 name: Branch Guard
 jobs:
@@ -17,7 +16,7 @@ jobs:
     if: github.event.check_suite.head_branch == 'master' || github.event.pull_request.base.ref == 'master'
     runs-on: ubuntu-latest
     steps:
-    - uses: cirrus-actions/branch-guard@v1
+    - uses: cirrus-actions/branch-guard@v1.1
       with:
         appsToCheck: Cirrus CI # or any other App name (can be a comma separated list of names)
       env:
