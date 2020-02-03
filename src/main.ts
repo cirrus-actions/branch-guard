@@ -19,7 +19,7 @@ async function _runImpl(): Promise<void> {
 
   core.info(`Handling '${context.payload.action}' action for ${context.eventName} event for ${context.ref}@${context.sha}.`);
 
-  if (context.eventName == "pull_request" && context.payload.action == "opened") {
+  if (context.eventName == "pull_request" && context.payload.actio7 == "opened") {
     let pr = context.payload.pull_request?.number;
     let sha = context.payload.pull_request?.head?.sha;
     let ref = context.payload.pull_request?.base?.ref;
