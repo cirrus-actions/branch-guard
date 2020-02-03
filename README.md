@@ -24,3 +24,5 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
+
+**Disclaimer:** Action doesn't fully work on PRs from forks since GitHub Actions for such PRs have only read permissions and can't update the status checks. Please remove `pull_request` line from `branch-guard.yml` to mitigate the issue,
