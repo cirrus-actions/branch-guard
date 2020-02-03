@@ -116,11 +116,11 @@ export async function overallRefConclusion(repositoryOwner: string, repositoryNa
     repo: repositoryName,
     ref: ref
   });
-  let checkSuites = checksResponse.data.check_suites.filter(checkSuite => appsToCheck.length === 0 || appsToCheck.includes(checkSuite.app.name));
-  core.info(`Found ${checkSuites.length} check suites.`);
-  for (const checkSuite of checkSuites) {
+  for (const checkSuite of checksResponse.data.check_suites) {
     core.info(`Check suite ${checkSuite.id}: ${checkSuite.app.name} ${checkSuite.status} ${checkSuite.conclusion}`)
   }
+  let checkSuites = checksResponse.data.check_suites.filter(checkSuite => appsToCheck.length === 0 || appsToCheck.includes(checkSuite.app.name));
+  core.info(`Processing ${checkSuites.length} check suites after filtering by 'appsToCheck'.`);
   // first check if there is any suite that completed but not in a successful state to report it ASAP
   for (const checkSuite of checkSuites) {
     if (checkSuite.status === 'completed' && (checkSuite.conclusion !== 'neutral' && checkSuite.conclusion !== 'success')) {
