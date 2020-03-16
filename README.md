@@ -1,3 +1,7 @@
+# Deprecated
+
+In favor of a more suphesicated GitHub App. See https://github.com/cirruslabs/gh-submit-queue
+
 # Block PR merges when Checks for target branches are failing 🔓
 
 ![](demo.png)
